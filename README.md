@@ -2,8 +2,8 @@
 
 ## Finished assignments
 
--
+- 01_House
 
 ## WIP
 
-- 01_House
+- 
