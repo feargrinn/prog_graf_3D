@@ -3,6 +3,7 @@
 ## Finished assignments
 
 - 01_House
+- 02_Colors
 
 ## WIP
 
