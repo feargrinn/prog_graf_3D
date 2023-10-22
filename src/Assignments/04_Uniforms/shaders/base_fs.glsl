@@ -9,9 +9,6 @@ layout(std140, binding = 0) uniform Mixer {
 
 in vec4 vertex_color;
 
-// out vec4 vFragColor;
-
 void main() {
-    // vFragColor = vec4(1.0, 0.0, 0.0, 1.0);
     vFragColor = vertex_color;
 }

@@ -1,8 +1,3 @@
-//
-// Created by pbialas on 25.09.2020.
-//
-
-
 #include "app.h"
 
 #include <vector>
@@ -50,10 +45,6 @@ void SimpleShapeApplication::init() {
 
     // index vector
     std::vector<GLubyte> indices = {0,1,2,3,4,5,5,6,4};
-
-    // for(GLubyte i=0; i<vertices.size()-1; i++) {
-    //     indices.push_back(i);
-    // }
 
     /*
      * All the calls to the OpenGL API are "encapsulated" in the OGL_CALL macro for debugging purposes as explained in
@@ -135,8 +126,6 @@ void SimpleShapeApplication::init() {
 void SimpleShapeApplication::frame() {
     // Binding the VAO will set up all the required vertex attribute arrays.
     OGL_CALL(glBindVertexArray(vao_));
-    // OGL_CALL(glDrawArrays(GL_TRIANGLES, 0, 9));
-    // OGL_CALL(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid *>(0)));
     OGL_CALL(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid *>(0)));
     OGL_CALL(glBindVertexArray(0));
 }
