@@ -76,6 +76,20 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLbyte), indices.data(), GL_STATIC_DRAW));
     OGL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
+    // generating buffer for uniforms assignment
+    GLuint uniforms_buffer_handle;
+    OGL_CALL(glGenBuffers(1, &uniforms_buffer_handle));
+    OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, uniforms_buffer_handle));
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 8 * sizeof(float)), 0, GL_STATIC_DRAW);
+    float strength = 0.5;
+    float mix_color[3] = {0.0, 0.0, 1.0};
+
+    // binding buffer to interface block???
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniforms_buffer_handle)); // index to jest binding z fragment shadera layout(std140, binding = 0)
+    OGL_CALL(glBufferSubdata(GL_UNIFORM_BUFFER, 0, 1 * sizeof(float), &strength));
+    OGL_CALL(glBufferSubdata(GL_UNIFORM_BUFFER, 4, 4 * sizeof(float), &mix_color)); // 3 size of float?
+    // OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
+
     // This sets up a Vertex Array Object (VAO) that encapsulates
     // the state of all vertex buffers needed for rendering.
     // The vao_ variable is a member of the SimpleShapeApplication class and is defined in src/Application/app.h.
