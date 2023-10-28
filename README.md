@@ -5,7 +5,8 @@
 - 01_House
 - 02_Colors
 - 03_Indices
+- 04_Uniforms
 
 ## WIP
 
-- 04_Uniforms
+- 

@@ -72,21 +72,21 @@ void SimpleShapeApplication::init() {
     GLuint uniforms_buffer_handle;
     OGL_CALL(glGenBuffers(1, &uniforms_buffer_handle));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, uniforms_buffer_handle));
-    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 8 * sizeof(float), 0, GL_STATIC_DRAW));
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 8 * sizeof(float), nullptr, GL_STATIC_DRAW));
     float strength = 0.5;
     float mix_color[3] = {0.0, 0.0, 1.0};
 
     // binding buffer for rgba
-    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniforms_buffer_handle)); // index to jest binding z fragment shadera layout(std140, binding = 0)
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniforms_buffer_handle));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 1 * sizeof(float), &strength));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16, 3 * sizeof(float), &mix_color)); // 3 size of float, 16 bajtow to 4 * sizeof float
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16, 3 * sizeof(float), &mix_color));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 
     // generating buffer for transformations
     GLuint transformations_buffer_handle;
     OGL_CALL(glGenBuffers(1, &transformations_buffer_handle));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, transformations_buffer_handle));
-    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 12 * sizeof(float), nullptr, GL_STATIC_DRAW)); // 2+2+8 // nullptr zamiast 0
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 12 * sizeof(float), nullptr, GL_STATIC_DRAW));
     float theta = 1.0*glm::pi<float>()/6.0f;//30 degrees
     auto cs = std::cos(theta);
     auto ss = std::sin(theta);  
@@ -95,7 +95,7 @@ void SimpleShapeApplication::init() {
     glm::vec2 scale{0.5, 0.5};
 
     // binding buffer for transformations
-    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, transformations_buffer_handle)); // index to jest binding
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, transformations_buffer_handle));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 2 * sizeof(float), &scale));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 8, 2 * sizeof(float), &trans));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16, 2 * sizeof(float), &rot[0]));
