@@ -10,7 +10,6 @@ layout(std140, binding = 0) uniform Mixer {
 in vec4 vertex_color;
 
 void main() {
-    // vFragColor = vertex_color;
     vFragColor.a = vertex_color.a;
     vFragColor.rgb = mix(vertex_color.rgb, mix_color, strength);
 }

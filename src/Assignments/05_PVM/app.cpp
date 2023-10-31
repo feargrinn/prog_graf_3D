@@ -11,6 +11,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/constants.hpp"
 
+#include "glm/gtc/matrix_transform.hpp"
+
 void SimpleShapeApplication::init() {
     /*
      * A utility function that reads the shaders' source files, compiles them and creates the program object,
@@ -86,20 +88,23 @@ void SimpleShapeApplication::init() {
     GLuint transformations_buffer_handle;
     OGL_CALL(glGenBuffers(1, &transformations_buffer_handle));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, transformations_buffer_handle));
-    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 12 * sizeof(float), nullptr, GL_STATIC_DRAW));
-    float theta = 1.0*glm::pi<float>()/6.0f;//30 degrees
-    auto cs = std::cos(theta);
-    auto ss = std::sin(theta);  
-    glm::mat2 rot{cs,ss,-ss,cs};
-    glm::vec2 trans{0.0, -0.25};
-    glm::vec2 scale{0.5, 0.5};
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 16 * sizeof(float), nullptr, GL_STATIC_DRAW));
+
+    // This set up an OpenGL viewport of the size of the whole rendering window.
+    auto [w, h] = frame_buffer_size();
+    OGL_CALL(glViewport(0, 0, w, h));
+
+    // PVM matrix
+    glm::mat4 PVM(1.0f);
+    glm::mat4 M(1.0);
+    M = glm::translate(M,glm::vec3(-1.0f,1.0f,0.0f));
+    glm::mat4 V = glm::lookAt(glm::vec3(0.0f,-2.0f,2.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f));
+    glm::mat4 P = glm::perspective(glm::radians(45.0f),float(w)/h,0.1f,20.0f);
+    PVM = P*V*M;
 
     // binding buffer for transformations
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, transformations_buffer_handle));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 2 * sizeof(float), &scale));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 8, 2 * sizeof(float), &trans));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16, 2 * sizeof(float), &rot[0]));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 32, 2 * sizeof(float), &rot[1]));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 
     // This sets up a Vertex Array Object (VAO) that encapsulates
@@ -135,10 +140,6 @@ void SimpleShapeApplication::init() {
     // Setting the background color of the rendering window,
     // I suggest not using white or black for better debugging.
     OGL_CALL(glClearColor(0.81f, 0.81f, 0.8f, 1.0f));
-
-    // This set up an OpenGL viewport of the size of the whole rendering window.
-    auto [w, h] = frame_buffer_size();
-    OGL_CALL(glViewport(0, 0, w, h));
 
     OGL_CALL(glUseProgram(program));
 }
