@@ -7,7 +7,8 @@
 - 03_Indices
 - 04_Uniforms
 - 05_PVM
+- 06_Pyramid
 
 ## WIP
 
-- 06_Pyramid
+- 
