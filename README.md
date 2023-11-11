@@ -8,7 +8,8 @@
 - 04_Uniforms
 - 05_PVM
 - 06_Pyramid
+- 07_Resize
 
 ## WIP
 
-- 
+- 08_Zoom
