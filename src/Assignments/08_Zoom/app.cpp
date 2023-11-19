@@ -165,9 +165,13 @@ void SimpleShapeApplication::frame() {
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, 0));
 }
 
-// kiedy Camera::aspect_ sie aktualizuje?
 void SimpleShapeApplication::framebuffer_resize_callback(int w, int h) {
     Application::framebuffer_resize_callback(w, h);
     OGL_CALL(glViewport(0, 0, w, h));
     camera()->set_aspect(float(w)/h);
+}
+
+void SimpleShapeApplication::scroll_callback(double xoffset, double yoffset) {
+    Application::scroll_callback(xoffset, yoffset);   
+    camera()->zoom(yoffset / 20.0f);
 }

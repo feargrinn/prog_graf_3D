@@ -16,8 +16,8 @@
 
 class SimpleShapeApplication : public xe::Application {
 public:
-     SimpleShapeApplication(int width, int height, std::string title, bool debug) :
-     Application(width, height, title, debug), camera_(nullptr) {}
+    SimpleShapeApplication(int width, int height, std::string title, bool debug) :
+    Application(width, height, title, debug), camera_(nullptr) {}
 
     void init() override;
 
@@ -26,6 +26,8 @@ public:
     void framebuffer_resize_callback(int w, int h) override;
 
     void set_camera(Camera *camera) { camera_ = camera; }
+
+    void scroll_callback(double xoffset, double yoffset) override;
 
     Camera *camera() const {
         assert(camera_);
