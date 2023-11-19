@@ -9,7 +9,7 @@
 - 05_PVM
 - 06_Pyramid
 - 07_Resize
+- 08_Zoom
 
 ## WIP
 
-- 08_Zoom
