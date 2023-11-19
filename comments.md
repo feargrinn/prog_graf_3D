@@ -26,6 +26,17 @@ Nie kompiluje się.
 
 6.11.2023 11:08:52 OK
 
+# Resize
+
+13.11.2023 11:59:53 OK
+
+# Zoom
+
+13.11.2023 12:00:16
+Nie kompiluje się. 
+
+
+
 
 
 
