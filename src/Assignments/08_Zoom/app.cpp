@@ -13,6 +13,8 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "camera.h"
+
 void SimpleShapeApplication::init() {
     /*
      * A utility function that reads the shaders' source files, compiles them and creates the program object,
@@ -99,12 +101,10 @@ void SimpleShapeApplication::init() {
 
     // camera and PVM
     set_camera(new Camera);
-    aspect_ = float(w)/h;
 
     M_ = glm::mat4(1.0);
-    // V_ = glm::lookAt(glm::vec3(2.0f,1.0f,2.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,1.0f));
     camera()->look_at(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    
+    camera()->perspective(glm::radians(45.0f), float(w)/h, 0.1f, 20.0f);
 
     // This sets up a Vertex Array Object (VAO) that encapsulates
     // the state of all vertex buffers needed for rendering.
@@ -151,8 +151,7 @@ void SimpleShapeApplication::init() {
 //This functions is called every frame and does the actual rendering.
 void SimpleShapeApplication::frame() {
 
-    P_ = glm::perspective(glm::radians(45.0f),aspect_,0.1f,20.0f);
-    glm::mat4 PVM = P_*V_*M_;
+    glm::mat4 PVM = camera()->projection() * camera()->view() * M_;
 
     // binding buffer for transformations
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u_trans_buffer_handle_));
@@ -166,8 +165,9 @@ void SimpleShapeApplication::frame() {
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, 0));
 }
 
+// kiedy Camera::aspect_ sie aktualizuje?
 void SimpleShapeApplication::framebuffer_resize_callback(int w, int h) {
     Application::framebuffer_resize_callback(w, h);
     OGL_CALL(glViewport(0, 0, w, h));
-    aspect_ = float(w)/h;
+    camera()->set_aspect(float(w)/h);
 }

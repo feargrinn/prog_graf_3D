@@ -12,6 +12,7 @@
 
 #include "glm/glm.hpp"
 
+#include "camera.h"
 
 class SimpleShapeApplication : public xe::Application {
 public:
@@ -34,13 +35,6 @@ public:
 private:
     GLuint vao_;
 
-    float fov_;
-    float aspect_;
-    float near_;
-    float far_;
-
-    glm::mat4 P_;
-    glm::mat4 V_;
     glm::mat4 M_;
 
     GLuint u_trans_buffer_handle_;
