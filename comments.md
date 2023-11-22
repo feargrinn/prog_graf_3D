@@ -35,6 +35,8 @@ Nie kompiluje się.
 13.11.2023 12:00:16
 Nie kompiluje się. 
 
+20.11.2023 17:36:30 OK 
+
 
 
 
