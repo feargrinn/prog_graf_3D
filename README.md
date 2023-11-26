@@ -10,6 +10,7 @@
 - 06_Pyramid
 - 07_Resize
 - 08_Zoom
+- 09_CameraMovement
 
 ## WIP
 
