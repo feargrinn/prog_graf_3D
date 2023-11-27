@@ -37,6 +37,11 @@ Nie kompiluje się.
 
 20.11.2023 17:36:30 OK 
 
+# Camera movement 
+
+27.11.2023 10:37:57 OK
+
+
 
 
 
