@@ -14,3 +14,5 @@
 
 ## WIP
 
+- 10_Mesh - napotkalem problem ktorego nie bylem w stanie rozwiazac, podejde z tym na cwiczeniach
+
