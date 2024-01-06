@@ -41,6 +41,10 @@ Nie kompiluje się.
 
 27.11.2023 10:37:57 OK
 
+# Mesh
+
+13.12.2023 10:36:51
+Proszę usunąć niepotrzebny wykomentowany kod. 
 
 
 
