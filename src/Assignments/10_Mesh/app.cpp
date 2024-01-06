@@ -8,6 +8,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 void SimpleShapeApplication::init() {
+    
     /*
      * A utility function that reads the shaders' source files, compiles them and creates the program object,
      * as everything in OpenGL we reference the program by an integer "handle".
@@ -20,7 +21,6 @@ void SimpleShapeApplication::init() {
                     {GL_VERTEX_SHADER,   std::string(PROJECT_DIR) + "/shaders/base_vs.glsl"},
                     {GL_FRAGMENT_SHADER, std::string(PROJECT_DIR) + "/shaders/base_fs.glsl"}
             });
-
 
     if (!program) {
         SPDLOG_CRITICAL("Invalid program");
@@ -71,10 +71,8 @@ void SimpleShapeApplication::init() {
 
     pyramid->load_indices(0, indices.size() * sizeof(GLbyte), indices.data());
 
-    // na tej linijce sie psuje, nie wyrzuca bledu ale calkiem przestaje sie otwierac to okienko z piramidka
     pyramid->add_primitive(0, 18);
     add_mesh(pyramid);
-
 
     /*
      * All the calls to the OpenGL API are "encapsulated" in the OGL_CALL macro for debugging purposes as explained in
@@ -83,32 +81,12 @@ void SimpleShapeApplication::init() {
      * occurred.
      */
 
-    // Generating the buffer and loading the vertex data into it.
-    // GLuint v_buffer_handle;
-    // OGL_CALL(glGenBuffers(1, &v_buffer_handle));
-    // OGL_CALL(glBindBuffer(GL_ARRAY_BUFFER, v_buffer_handle));
-    // OGL_CALL(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW));
-    // OGL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
-    // loading vertices with the mesh method
-    // pyramid->load_vertices(0, vertices.size() * sizeof(GLfloat), vertices.data());
-
-    // generating buffer for indices
-    // GLuint index_buffer_handle;
-    // OGL_CALL(glGenBuffers(1, &index_buffer_handle));
-    // OGL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_handle));
-    // OGL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLbyte), indices.data(), GL_STATIC_DRAW));
-    // OGL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-    // loading vertices with the mesh method
-    // pyramid->load_indices(0, indices.size() * sizeof(GLbyte), indices.data());
-
     // generating buffer for transformations
     OGL_CALL(glGenBuffers(1, &u_trans_buffer_handle_));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, u_trans_buffer_handle_));
     OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 16 * sizeof(float), nullptr, GL_STATIC_DRAW));
 
-    // This set up an OpenGL viewport of the size of the whole rendering window.
+    // This sets up an OpenGL viewport of the size of the whole rendering window.
     auto [w, h] = frame_buffer_size();
     OGL_CALL(glViewport(0, 0, w, h));
 
@@ -118,40 +96,6 @@ void SimpleShapeApplication::init() {
     M_ = glm::mat4(1.0);
     camera()->look_at(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     camera()->perspective(glm::radians(45.0f), float(w)/h, 0.1f, 20.0f);
-
-    // This sets up a Vertex Array Object (VAO) that encapsulates
-    // the state of all vertex buffers needed for rendering.
-    // The vao_ variable is a member of the SimpleShapeApplication class and is defined in src/Application/app.h.
-    // OGL_CALL(glGenVertexArrays(1, &vao_));
-    // OGL_CALL(glBindVertexArray(vao_));
-    // OGL_CALL(glBindBuffer(GL_ARRAY_BUFFER, v_buffer_handle));
-
-    /*
-     * The following lines bound the vertex attribute 0 to the currently bound vertex buffer (the one we just created).
-     * Attribute 0 is specified in the vertex shader with the
-     * layout (location = 0) in vec4 a_vertex_position;
-     * directive.
-     */
-    // // This specifies that the data for attribute 0 should be read from a vertex buffer
-    // OGL_CALL(glEnableVertexAttribArray(0));
-    // // and this specifies the data layout in the buffer.
-    // OGL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),
-    //                                reinterpret_cast<GLvoid *>(0)));
-
-    // // adding attributes (10_Mesh)
-    // // pyramid->add_attribute(xe::AttributeType::POSITION, 3, GL_FLOAT, 0);
-
-    // // vertices colors
-    // OGL_CALL(glEnableVertexAttribArray(5));
-    // OGL_CALL(glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),
-    //                                reinterpret_cast<GLvoid *>(3 * sizeof(GLfloat))));
-
-    // // pyramid->add_attribute(xe::AttributeType::COLOR_0, 3, GL_FLOAT, 3 * sizeof(GLfloat));
-
-    // // binding indices buffer again
-    // OGL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_handle));
-    // OGL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    // OGL_CALL(glBindVertexArray(0));
 
     // Setting the background color of the rendering window,
     // I suggest not using white or black for better debugging.
@@ -176,11 +120,6 @@ void SimpleShapeApplication::frame() {
     // binding buffer for transformations
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u_trans_buffer_handle_));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
-
-    // Binding the VAO will set up all the required vertex attribute arrays.
-    // OGL_CALL(glBindVertexArray(vao_));
-    // OGL_CALL(glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid *>(0)));
-    // OGL_CALL(glBindVertexArray(0));
 
     for (auto m: meshes_)
      m->draw();

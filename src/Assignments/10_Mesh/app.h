@@ -32,10 +32,8 @@ public:
         return camera_;
     }
 
-    // CameraMovement
     void set_controler(xe::CameraController *controller) { controller_ = controller; }
 
-    // CameraMovement
     void mouse_button_callback(int button, int action, int mods) {
         Application::mouse_button_callback(button, action, mods);
 
@@ -71,7 +69,6 @@ private:
 
     xe::Camera *camera_;
 
-    // CameraMovement
     xe::CameraController *controller_;
 
     std::vector<xe::Mesh*> meshes_; 

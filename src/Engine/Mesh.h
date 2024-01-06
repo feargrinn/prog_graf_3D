@@ -22,18 +22,14 @@ namespace xe {
         COUNT = 6
     };
 
-
     class Mesh : public RegisteredObject {
     protected:
         std::vector<GLuint> attributes_;
     public:
-
-
         Mesh(GLsizei stride, GLsizei v_buffer_size, GLenum v_buffer_hint,
              GLsizei i_buffer_size, GLenum index_type, GLenum i_buffer_hint);
 
         virtual ~Mesh() {};
-
 
         void load_vertices(size_t offset, size_t size, void *data);
 
@@ -50,8 +46,6 @@ namespace xe {
             primitives_.emplace_back(start, end);
         }
 
-
-
         void add_primitive(GLuint start, GLuint end, const Material *material) {
             primitives_.emplace_back(start, end, material);
         }
@@ -60,7 +54,7 @@ namespace xe {
 
         struct Primitive {
             Primitive(GLuint start, GLuint end) :
-                    start(start), end(end), material(xe::null_material) {}
+                    start(start), end(end), material(xe::NullMaterial::null_material()) {}
 
             Primitive(GLuint start, GLuint end, const Material *material) :
                     start(start), end(end), material(material) {}
@@ -71,9 +65,7 @@ namespace xe {
             GLuint count() const { return end - start; }
 
             const Material *material;
-
         };
-
 
     private:
         GLuint index_size_;
@@ -84,8 +76,6 @@ namespace xe {
         const GLsizei stride_;
 
         std::vector<Primitive> primitives_;
-
     };
-
 
 }
