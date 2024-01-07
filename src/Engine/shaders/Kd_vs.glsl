@@ -8,8 +8,8 @@ layout(std140, binding = 1) uniform Transformations {
     mat4 PVM;
 };
 
-out vec4 vertex_color;
-out vec2 vertex_tex0;
+layout(location=6) out vec4 vertex_color;
+layout(location=7) out vec2 vertex_tex0;
 
 void main() {
     vertex_color = a_vertex_color;

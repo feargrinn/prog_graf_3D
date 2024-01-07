@@ -10,8 +10,8 @@ layout(std140, binding=0) uniform KdMaterial {
 
 uniform sampler2D map_Kd;
 
-in vec4 vertex_color;
-in vec2 vertex_texcoord_0;
+layout(location=6) in vec4 vertex_color;
+layout(location=7) in vec2 vertex_texcoord_0;
 
 vec3 srgb_gamma_correction(vec3 color) {
     color = clamp(color, 0.0, 1.0);
