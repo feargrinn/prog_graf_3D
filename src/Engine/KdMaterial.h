@@ -10,12 +10,8 @@ namespace xe {
 
     class KdMaterial : public AbstractMaterial<KdMaterial> {
     public:
-        KdMaterial(const glm::vec4 &Kd) : Kd_(Kd) {}
-        // static void init() {
-        //     create_material_uniform_buffer(2*sizeof(glm::vec4));
-        //     create_program_in_engine({{GL_VERTEX_SHADER, "Kd_vs.glsl"},
-        //                     {GL_FRAGMENT_SHADER, "Kd_fs.glsl"}});
-        // }
+        KdMaterial(const glm::vec4 &Kd) : Kd_(Kd), texture_(0) {}
+        KdMaterial(const glm::vec4 &Kd,  int use_vertex_colors, GLuint &texture) : Kd_(Kd), use_vertex_colors_(use_vertex_colors), texture_(texture) {}
         static void init();
         void bind() const override;
         void unbind() const override;
@@ -24,7 +20,7 @@ namespace xe {
         // color of material
         const glm::vec4 Kd_;
         int use_vertex_colors_ = false;
+        static GLint map_Kd_location_;
+        GLuint texture_;
     };
-
  }
-
