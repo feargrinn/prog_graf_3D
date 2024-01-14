@@ -46,13 +46,6 @@ void SimpleShapeApplication::init() {
     pyramid->add_attribute(xe::AttributeType::TEXCOORD_0, 2, GL_FLOAT, 3 * sizeof(GLfloat));
     pyramid->load_indices(0, indices.size() * sizeof(GLbyte), indices.data());
 
-    // auto kd_white_material = new xe::KdMaterial(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    // auto kd_grey_material = new xe::KdMaterial(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    // auto kd_red_material = new xe::KdMaterial(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    // auto kd_yellow_material = new xe::KdMaterial(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-    // auto kd_green_material = new xe::KdMaterial(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-    // auto kd_blue_material = new xe::KdMaterial(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
     // loading image
     stbi_set_flip_vertically_on_load(true);
     GLint width, height, channels;
@@ -71,16 +64,6 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
     OGL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img)); // GL_RGB i GL_RGBA na odwrot?
     // OGL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
-
-    // pyramid->add_primitive(0, 18, kd_white_material);
-    // pyramid->add_primitive(0, 18);
-    // ask about this - opengl deciding what to do when two meshes are on top of each other
-
-    // pyramid->add_primitive(0, 6, kd_grey_material);
-    // pyramid->add_primitive(6, 9, kd_red_material);
-    // pyramid->add_primitive(9, 12, kd_green_material);
-    // pyramid->add_primitive(12, 15, kd_yellow_material);
-    // pyramid->add_primitive(15, 18, kd_blue_material);
 
     pyramid->add_primitive(0, 18, new xe::KdMaterial({1.0f, 1.0f, 1.0f, 1.0f}, false, tex_handle));
     add_mesh(pyramid);

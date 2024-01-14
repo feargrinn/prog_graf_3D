@@ -7,6 +7,8 @@
 #include "glm/gtc/constants.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Engine/KdMaterial.h"
+#include "stb/stb_image.h"
+#include "Engine/texture.h"
 
 void SimpleShapeApplication::init() {
 
@@ -14,63 +16,33 @@ void SimpleShapeApplication::init() {
 
     // A vector containing the x,y,z vertex coordinates and rgb color values for the triangle.
     std::vector<GLfloat> vertices = {
-            -0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, // 0
-            -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, // 1
-            0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, // 2
-            0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, // 3
+            -0.5f, -0.5f,  0.0f,  0.1910f,  0.5000f, // 0
+            -0.5f,  0.5f,  0.0f,  0.5000f,  0.1910f, // 1
+             0.5f,  0.5f,  0.0f,  0.8090f,  0.5000f, // 2
+             0.5f, -0.5f,  0.0f,  0.5000f,  0.8090f, // 3
 
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // 4
-            0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // 5
-            0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // 6
-
-            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // 7
-            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // 8
-            0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 9
-
-            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, // 10
-            0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, // 11
-            0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, // 12
-
-            0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // 13
-            -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // 14
-            0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // 15
+             0.0f,  0.0f,  1.0f,  0.0000f,  1.0000f, // 4
+             0.0f,  0.0f,  1.0f,  0.0000f,  0.0000f, // 5
+             0.0f,  0.0f,  1.0f,  1.0000f,  0.0000f, // 6
+             0.0f,  0.0f,  1.0f,  1.0000f,  1.0000f  // 7
             };
 
     // index vector
     std::vector<GLubyte> indices = {
         0,1,2,
         0,2,3,
-        4,5,6,
-        7,8,9,
-        10,11,12,
-        13,14,15
+
+        3,2,7,
+        1,0,5,
+        0,3,4,
+        2,1,6
         };
 
-    // mesh for pyramid
-    auto pyramid = new xe::Mesh(6 * sizeof(float), vertices.size() * sizeof(float), GL_STATIC_DRAW,
-                             indices.size() * sizeof(GLubyte), GL_UNSIGNED_BYTE, GL_STATIC_DRAW);
-
-    pyramid->load_vertices(0, vertices.size() * sizeof(GLfloat), vertices.data());
-    pyramid->add_attribute(xe::AttributeType::POSITION, 3, GL_FLOAT, 0);
-    pyramid->add_attribute(xe::AttributeType::COLOR_0, 3, GL_FLOAT, 3 * sizeof(GLfloat));
-
-    pyramid->load_indices(0, indices.size() * sizeof(GLbyte), indices.data());
-
-    auto kd_grey_material = new xe::KdMaterial(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    auto kd_red_material = new xe::KdMaterial(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    auto kd_yellow_material = new xe::KdMaterial(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-    auto kd_green_material = new xe::KdMaterial(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-    auto kd_blue_material = new xe::KdMaterial(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    
-    // ask about this - opengl deciding what to do when two meshes are on top of each other
-    // depth test - has to be closer to replace the previous colour
-    // pyramid->add_primitive(0, 6, kd_green_material);
-    pyramid->add_primitive(0, 6, kd_grey_material);
-    pyramid->add_primitive(6, 9, kd_red_material);
-    pyramid->add_primitive(9, 12, kd_green_material);
-    pyramid->add_primitive(12, 15, kd_yellow_material);
-    pyramid->add_primitive(15, 18, kd_blue_material);
-    add_mesh(pyramid);
+    // auto pyramid = xe::load_mesh_from_obj("Models/pyramid.obj", "Models");
+    // auto pyramid = xe::load_mesh_from_obj(std::string(ROOT_DIR) + "/Models/pyramid.obj", std::string(ROOT_DIR) + "/Models");
+    // add_mesh(pyramid);
+    auto globe = xe::load_mesh_from_obj(std::string(ROOT_DIR) + "/Models/blue_marble.obj", std::string(ROOT_DIR) + "/Models");
+    add_mesh(globe);
 
     // generating buffer for transformations
     OGL_CALL(glGenBuffers(1, &u_trans_buffer_handle_));
