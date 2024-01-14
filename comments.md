@@ -46,6 +46,18 @@ Nie kompiluje się.
 13.12.2023 10:36:51
 Proszę usunąć niepotrzebny wykomentowany kod. 
 
+# Kd material
+
+8.01.2024 15:52:24
+Brak konstruktora który pozwoliłby ustawić wartość zmiennej `use_vertex_colors` bez ustawiania tekstury. 
+
+# Textures
+
+8.01.2024 15:54:19
+Proszę usunąć niepotrzebny wykomentowany kod. 
+
+
+
 
 
 
