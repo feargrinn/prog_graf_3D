@@ -1,64 +1,73 @@
-# House
+# Total 92/147
+
+# House 2/2
 
 16.10.23 OK
 
-# Colors 
+# Colors 5/5
 
 16.10.23 OK
 
-# Indices
+# Indices 5/5
 
 23.10.2023 10:50:12 OK
 Ale proszę usunąć wykomentowane wierzchołki.
 
-# Uniforms
+# Uniforms 8/8
 
 23.10.2023 10:52:15
 Nie kompiluje się.
 
 30.10.2023 11:04:06 OK
 
-# PVM
+# PVM 5/5
 
 6.11.2023 11:08:32 OK
 
-# Pyramid
+# Pyramid 4/4
 
 6.11.2023 11:08:52 OK
 
-# Resize
+# Resize 8/8
 
 13.11.2023 11:59:53 OK
 
-# Zoom
+# Zoom 10/10
 
 13.11.2023 12:00:16
 Nie kompiluje się. 
 
 20.11.2023 17:36:30 OK 
 
-# Camera movement 
+# Camera movement 15/15 
 
 27.11.2023 10:37:57 OK
 
-# Mesh
+# Mesh 10/10
 
 13.12.2023 10:36:51
 Proszę usunąć niepotrzebny wykomentowany kod. 
 
-# Kd material
+15.01.2024 16:31:53 ok
+
+# Kd material 
 
 8.01.2024 15:52:24
 Brak konstruktora który pozwoliłby ustawić wartość zmiennej `use_vertex_colors` bez ustawiania tekstury. 
 
-# Textures
+15.01.2024 16:25:33
+'Ify” w shaderze fragmentów są złe. Drugi ‘if’ nadpisuje zmienną `color` i zmienna `use_vertex_colors` nie ma znaczenia. 
+
+# Textures 15/15 
 
 8.01.2024 15:54:19
 Proszę usunąć niepotrzebny wykomentowany kod. 
 
+15.01.2024 16:28:50 OK
 
+# OBJ reader 5/5
 
-
+15.01.2024 16:29:31 OK
 
 
 
