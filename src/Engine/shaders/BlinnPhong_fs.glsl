@@ -2,7 +2,8 @@
 
 layout(location=0) out vec4 vFragColor;
 
-layout(std140, binding=0) uniform KdMaterial {
+layout(std140, binding=0) uniform Material {
+    vec4 Ka;
     vec4 Kd;
     bool use_vertex_color;
     bool use_map_Kd;
@@ -31,6 +32,8 @@ void main() {
     if (use_map_Kd) {
         vec4 texture_color = texture(map_Kd, vertex_texcoord_0);
         color *= texture_color;
+    } else {
+        color = Kd;
     }
 
     // vFragColor = color;
