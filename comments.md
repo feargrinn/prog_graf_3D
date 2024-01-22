@@ -1,4 +1,4 @@
-# Total 92/147
+# Total 111/147
 
 # House 2/2
 
@@ -50,13 +50,15 @@ Proszę usunąć niepotrzebny wykomentowany kod.
 
 15.01.2024 16:31:53 ok
 
-# Kd material 
+# Kd material 19/20
 
 8.01.2024 15:52:24
 Brak konstruktora który pozwoliłby ustawić wartość zmiennej `use_vertex_colors` bez ustawiania tekstury. 
 
 15.01.2024 16:25:33
 'Ify” w shaderze fragmentów są złe. Drugi ‘if’ nadpisuje zmienną `color` i zmienna `use_vertex_colors` nie ma znaczenia. 
+
+22.01.2024 08:39:14 OK
 
 # Textures 15/15 
 
@@ -69,7 +71,10 @@ Proszę usunąć niepotrzebny wykomentowany kod.
 
 15.01.2024 16:29:31 OK
 
+# Diffuse
 
+22.01.2024 10:06:15
+Uniform buffer w BlinnPhing material jest za mały. 
 
 
 
