@@ -24,7 +24,6 @@ void main() {
     
     vec4 a_vertex_position_vs = VM * a_vertex_position;
     vertex_position_vs = a_vertex_position_vs.xyz/a_vertex_position_vs.w;
-    // vertex_position_vs = (a_vertex_position * VM).xyz;
 
     vertex_normal_vs = normalize(VM_Normal * a_vertex_normal);
 }

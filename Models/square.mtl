@@ -3,5 +3,4 @@ newmtl SilverSand
 Ka 0.7490 0.7569 0.7601
 Kd 0.7490 0.7569 0.7601
 # Ks 1.0 1.0 1.0
-illum 1 # 0 znaczy ze nie ma oswietlenia (jak kd material), w meshloader switch zaklada ze jest kdmaterial, ale jak nie zostal zainicjalizowany
-# zostawic kdinit w app.cpp
+illum 1

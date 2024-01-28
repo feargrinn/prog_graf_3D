@@ -13,7 +13,7 @@
 
 void SimpleShapeApplication::init() {
 
-    xe::KdMaterial::init(); // zostawic to zeby nie bylo bledu
+    xe::KdMaterial::init();
     xe::BlinnPhongMaterial::init();
 
     // A vector containing the x,y,z vertex coordinates and rgb color values for the triangle.
@@ -40,11 +40,6 @@ void SimpleShapeApplication::init() {
         2,1,6
         };
 
-    // auto pyramid = xe::load_mesh_from_obj("Models/pyramid.obj", "Models");
-    // auto pyramid = xe::load_mesh_from_obj(std::string(ROOT_DIR) + "/Models/pyramid.obj", std::string(ROOT_DIR) + "/Models");
-    // add_mesh(pyramid);
-    // auto globe = xe::load_mesh_from_obj(std::string(ROOT_DIR) + "/Models/blue_marble.obj", std::string(ROOT_DIR) + "/Models");
-    // add_mesh(globe);
     auto square = xe::load_mesh_from_obj(std::string(ROOT_DIR) + "/Models/square.obj", std::string(ROOT_DIR) + "/Models");
     add_mesh(square);
 
@@ -66,20 +61,15 @@ void SimpleShapeApplication::init() {
     set_camera(new xe::Camera);
 
     M_ = glm::mat4(1.0);
-    // camera()->look_at(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     camera()->look_at(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     camera()->perspective(glm::radians(45.0f), float(w)/h, 0.1f, 20.0f);
 
     // Setting the background color of the rendering window,
     OGL_CALL(glClearColor(0.81f, 0.81f, 0.8f, 1.0f));
 
-    // OGL_CALL(glUseProgram(program));
-
-    // OGL_CALL(glEnable(GL_CULL_FACE));
     OGL_CALL(glDisable(GL_CULL_FACE));
     OGL_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     OGL_CALL(glEnable(GL_DEPTH_TEST));
-    // glDepthFunc(GL_ALWAYS); 
 
     // CameraMovement
     set_controler(new xe::CameraController(camera()));
@@ -90,10 +80,8 @@ void SimpleShapeApplication::init() {
 
 //This functions is called every frame and does the actual rendering.
 void SimpleShapeApplication::frame() {
-    // potem jak bedzie ptr = glMapBufferRange() (zwraca wskaznik na kawalek bufora) to mozna uzyz buffersubdata zeby nie dodawac robowty ale moze sbie sprobuj...
 
     glm::mat4 PVM = camera()->projection() * camera()->view() * M_;
-    // glm::mat4 VM = glm::mat4(1.0);
     glm::mat4 VM = camera()->view() * M_;
 
     auto R = glm::mat3(VM);
@@ -106,8 +94,6 @@ void SimpleShapeApplication::frame() {
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u_trans_buffer_handle_));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), &VM[0]));
-    // KOMENTARZ DLA MNIE prosze nie czytac no worries if not thx: niunia colours na koniec zadan
-    // OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), &VM_Normal[0]));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 32 * sizeof(float), 4 * sizeof(float), &VM_Normal[0]));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 36 * sizeof(float), 4 * sizeof(float), &VM_Normal[1]));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 40 * sizeof(float), 4 * sizeof(float), &VM_Normal[2]));
@@ -117,12 +103,10 @@ void SimpleShapeApplication::frame() {
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), &ambient));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), sizeof(int), &n_lights));
     for (int i = 0; i < n_lights; i++) {
-        // lights_[i] = xe::transform(lights_[i], VM);
         xe::PointLight transformed_light = xe::transform(lights_[i], VM);
         OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3) + sizeof(int) + i * sizeof(xe::PointLight), sizeof(xe::PointLight), &transformed_light));
     }
     
-
     for (auto m: meshes_)
         m->draw();
 

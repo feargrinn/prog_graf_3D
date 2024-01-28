@@ -53,24 +53,14 @@ void main() {
         color *= texture_color;
     }
 
-    // vFragColor = color;
     vFragColor.a = color.a;
-    // vFragColor.rgb = srgb_gamma_correction(color.rgb);
     vFragColor.rgb = srgb_gamma_correction(normal.rgb);
-    // ???
-    // vFragColor.rgb = abs(vertex_position_vs);
-
-    // vFragColor.rgb = abs(vertex_normal_vs);
-
     vFragColor.rgb = Ka.rgb * ambient;
 
     for (int i = 0; i < n_lights; i++) {
         float light_distance = distance(lights[i].position, vertex_position_vs);
         float r = max(lights[i].radius, light_distance);
         float attenuation = 1.0 / (r * r);
-        // kolorki......
-        // vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation * normal;
-        // vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
-        if (gl_FrontFacing) vFragColor.rgb += 1.0/3.1415 * color.rgb * lights[i].color * lights[i].intensity * attenuation;
+        if (gl_FrontFacing) vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
     }
 }
