@@ -13,7 +13,7 @@
 
 void SimpleShapeApplication::init() {
 
-    xe::KdMaterial::init();
+    xe::KdMaterial::init(); // zostawic to zeby nie bylo bledu
     xe::BlinnPhongMaterial::init();
 
     // A vector containing the x,y,z vertex coordinates and rgb color values for the triangle.
@@ -51,7 +51,12 @@ void SimpleShapeApplication::init() {
     // generating buffer for transformations
     OGL_CALL(glGenBuffers(1, &u_trans_buffer_handle_));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, u_trans_buffer_handle_));
-    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 16 * sizeof(float), nullptr, GL_STATIC_DRAW));
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 48 * sizeof(float), nullptr, GL_STATIC_DRAW));
+
+    // gen buffer for lights
+    OGL_CALL(glGenBuffers(2, &u_light_buffer_handle_));
+    OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, u_light_buffer_handle_));
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3) + sizeof(int) + xe::MAX_POINT_LIGHTS * sizeof(xe::PointLight), nullptr, GL_STATIC_DRAW));
 
     // This sets up an OpenGL viewport of the size of the whole rendering window.
     auto [w, h] = frame_buffer_size();
@@ -78,21 +83,51 @@ void SimpleShapeApplication::init() {
 
     // CameraMovement
     set_controler(new xe::CameraController(camera()));
+
+    xe::PointLight white_light(glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 1.0, 1.0), 1.0, 0.1);
+    add_light(white_light);
 }
 
 //This functions is called every frame and does the actual rendering.
 void SimpleShapeApplication::frame() {
+    // potem jak bedzie ptr = glMapBufferRange() (zwraca wskaznik na kawalek bufora) to mozna uzyz buffersubdata zeby nie dodawac robowty ale moze sbie sprobuj...
 
     glm::mat4 PVM = camera()->projection() * camera()->view() * M_;
+    // glm::mat4 VM = glm::mat4(1.0);
+    glm::mat4 VM = camera()->view() * M_;
+
+    auto R = glm::mat3(VM);
+    auto VM_Normal = glm::mat3(glm::cross(R[1], R[2]), glm::cross(R[2], R[0]), glm::cross(R[0], R[1]));
+
+    glm::vec3 ambient = glm::vec3(0.25, 0.25, 0.25);
+    int n_lights = lights_.size();
 
     // binding buffer for transformations
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u_trans_buffer_handle_));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), &VM[0]));
+    // KOMENTARZ DLA MNIE prosze nie czytac no worries if not thx: niunia colours na koniec zadan
+    // OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), &VM_Normal[0]));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 32 * sizeof(float), 4 * sizeof(float), &VM_Normal[0]));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 36 * sizeof(float), 4 * sizeof(float), &VM_Normal[1]));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 40 * sizeof(float), 4 * sizeof(float), &VM_Normal[2]));
+
+    // loading light buffer
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 2, u_light_buffer_handle_));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), &ambient));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), sizeof(int), &n_lights));
+    for (int i = 0; i < n_lights; i++) {
+        // lights_[i] = xe::transform(lights_[i], VM);
+        xe::PointLight transformed_light = xe::transform(lights_[i], VM);
+        OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec3) + sizeof(int) + i * sizeof(xe::PointLight), sizeof(xe::PointLight), &transformed_light));
+    }
+    
 
     for (auto m: meshes_)
         m->draw();
 
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, 0));
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 2, 0));
 }
 
 void SimpleShapeApplication::framebuffer_resize_callback(int w, int h) {

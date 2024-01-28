@@ -7,7 +7,7 @@ namespace xe {
     glm::vec4 BlinnPhongMaterial::Ka_; 
 
     void BlinnPhongMaterial::init() {
-        create_material_uniform_buffer(2*sizeof(glm::vec4));
+        create_material_uniform_buffer(2*sizeof(glm::vec4) + 2*sizeof(int));
         create_program_in_engine({{GL_VERTEX_SHADER, "BlinnPhong_vs.glsl"},
                                   {GL_FRAGMENT_SHADER, "BlinnPhong_fs.glsl"}});
 

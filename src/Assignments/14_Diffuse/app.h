@@ -12,6 +12,7 @@
 #include "Engine/camera_controller.h"
 #include "Engine/Mesh.h"
 #include "Engine/mesh_loader.h"
+#include "Engine/light.h"
 
 class SimpleShapeApplication : public xe::Application {
 public:
@@ -61,11 +62,15 @@ public:
         meshes_.push_back(mesh);
     }
 
+    void add_light(xe::PointLight light) { lights_.push_back(light); }
+
 private:
     GLuint vao_;
     glm::mat4 M_;
     GLuint u_trans_buffer_handle_;
     xe::Camera *camera_;
     xe::CameraController *controller_;
-    std::vector<xe::Mesh*> meshes_; 
+    std::vector<xe::Mesh*> meshes_;
+    GLuint u_light_buffer_handle_;
+    std::vector<xe::PointLight> lights_;
 };

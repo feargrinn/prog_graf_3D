@@ -16,7 +16,7 @@ namespace xe {
     public:
         KdMaterial(const glm::vec4 &Kd) : Kd_(Kd), texture_(0) {}
         KdMaterial(const glm::vec4 &Kd, int use_vertex_colors) : Kd_(Kd), use_vertex_colors_(use_vertex_colors), texture_(0) {}
-        KdMaterial(const glm::vec4 &Kd,  int use_vertex_colors, GLuint &texture) : Kd_(Kd), use_vertex_colors_(use_vertex_colors), texture_(texture) {}
+        KdMaterial(const glm::vec4 &Kd,  int use_vertex_colors, GLuint texture) : Kd_(Kd), use_vertex_colors_(use_vertex_colors), texture_(texture) {}
         static void init();
         void bind() const override;
         void unbind() const override;
