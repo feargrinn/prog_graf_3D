@@ -3,8 +3,10 @@
 layout(location=0) out vec4 vFragColor;
 
 layout(std140, binding=0) uniform Material {
+    float Ns;
     vec4 Ka;
     vec4 Kd;
+    vec4 Ks;
     bool use_vertex_color;
     bool use_map_Kd;
 };
@@ -42,6 +44,10 @@ void main() {
     vec4 color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
     vec3 normal = normalize(vertex_normal_vs);
     float INV_PI = 1.0/3.1415;
+    // fragment pos - camera pos (0,0,0)
+    vec3 view_vector = normalize(vertex_position_vs);
+    // float Ns = 500.0;
+    // vec4 Ks = vec4(1.0, 1.0, 1.0, 1.0);
 
     if (use_vertex_color) {
         color = vertex_color * Kd;
@@ -61,6 +67,36 @@ void main() {
         float light_distance = distance(lights[i].position, vertex_position_vs);
         float r = max(lights[i].radius, light_distance);
         float attenuation = 1.0 / (r * r);
-        if (gl_FrontFacing) vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
+    
+
+        vec3 light_vector = lights[i].position - vertex_position_vs;
+        vec3 half_vector = normalize(light_vector + view_vector);
+
+        // MOJ KOMENTARZ DO 14
+        // uzywam takiego kodu zamiast odwracania normalnych, mozliwe ze wczesniej cos zgubilem ale odwracanie normalnych fragmentow
+        // z tylu kwadratu nie powodowalo ze byl nieoswietlony
+        if (gl_FrontFacing) {
+            // diffuse
+            vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
+            // specular
+            vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
+        }
+
     }
+    
+    // debug stuff
+    //vFragColor.rgb = Ks.rgb;
+    /*
+    vFragColor.r = Ks.b;
+    vFragColor.g = Ks.b;
+    vFragColor.b = Ks.b;
+    */
+    /*
+    vFragColor.r = Ks.g;
+    vFragColor.g = Ks.g;
+    vFragColor.b = Ks.g;
+    */
+
+    // MOJ KOMENTARZ DO 15
+    // cos wychodzi z tego zadania ale wartosci zmiennych Ks nie sa takie jakie przekazuje w metodzie bind w BlinnPhongMaterial.cpp
 }

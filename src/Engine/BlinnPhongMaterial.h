@@ -30,5 +30,7 @@ namespace xe {
         static GLint map_Kd_location_;
         GLuint texture_;
         static glm::vec4 Ka_;
+        static glm::vec4 Ks_;
+        static float Ns_;
     };
  }
