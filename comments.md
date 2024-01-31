@@ -80,4 +80,6 @@ Uniform buffer w BlinnPhing material jest za mały.
 29.01.2024 13:21:16
 Żle Pan przesyła wartości do bufora material. Zaczyna Pan od floata, a potem przesyła Pan vec4. Wedłu std140 vec4 powinien się zaczynać na granicy rozmiaru 4 floatów. Dlatego pojawia się Panu czerwony kwadrat
 
-
+31.01.2024 11:16:43
+normalna w ogóle nie jest używana do obliczenia swiatła!
+Warunek sprawdzający czy ścianka jest front czy backfacing jest niepoprawny. Jakby Pan przestawił switalo na druga strone to ta scianka powinna być oświetlona. To się osiąga zmieniając normalne, takl jak to opisałem. 
