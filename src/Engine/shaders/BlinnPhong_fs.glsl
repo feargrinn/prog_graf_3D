@@ -47,6 +47,10 @@ void main() {
     // fragment pos - camera pos (0,0,0)
     vec3 view_vector = normalize(vertex_position_vs);
 
+    if (!gl_FrontFacing) {
+        normal = -normal;
+    }
+
     if (use_vertex_color) {
         color = vertex_color * Kd;
     } else {
@@ -58,8 +62,9 @@ void main() {
     }
 
     vFragColor.a = color.a;
-    vFragColor.rgb = srgb_gamma_correction(normal.rgb);
-    vFragColor.rgb = Ka.rgb * ambient;
+    vFragColor.rgb = color.rgb;
+    // vFragColor.rgb = srgb_gamma_correction(normal.rgb);
+    // vFragColor.rgb *= Ka.rgb * ambient;
 
     for (int i = 0; i < n_lights; i++) {
         float light_distance = distance(lights[i].position, vertex_position_vs);
@@ -68,14 +73,22 @@ void main() {
     
 
         vec3 light_vector = lights[i].position - vertex_position_vs;
+        //vec3 light_vector = normalize(lights[i].position - vertex_position_vs);
         vec3 half_vector = normalize(light_vector + view_vector);
 
-        if (gl_FrontFacing) {
-            // diffuse
-            vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
-            // specular
-            vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
-        }
+        // diffuse
+        float diff = max(dot(normal, light_vector), 0.0);
+        vec3 diffuse = diff * Ka.rgb;
+
+        //
+        // vec3 result = (ambient + diffuse) * color.rgb;
+        vec3 result = (ambient * lights[i].color * lights[i].intensity * attenuation + diffuse * INV_PI) * color.rgb;
+        vFragColor = vec4(result, 1.0);
+
+        // vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
+
+        // specular
+        vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
 
     }
     
