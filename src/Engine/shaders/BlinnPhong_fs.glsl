@@ -62,9 +62,7 @@ void main() {
     }
 
     vFragColor.a = color.a;
-    vFragColor.rgb = color.rgb;
     // vFragColor.rgb = srgb_gamma_correction(normal.rgb);
-    // vFragColor.rgb *= Ka.rgb * ambient;
 
     for (int i = 0; i < n_lights; i++) {
         float light_distance = distance(lights[i].position, vertex_position_vs);
@@ -76,19 +74,23 @@ void main() {
         //vec3 light_vector = normalize(lights[i].position - vertex_position_vs);
         vec3 half_vector = normalize(light_vector + view_vector);
 
-        // diffuse
-        float diff = max(dot(normal, light_vector), 0.0);
-        vec3 diffuse = diff * Ka.rgb;
 
-        //
-        // vec3 result = (ambient + diffuse) * color.rgb;
-        vec3 result = (ambient * lights[i].color * lights[i].intensity * attenuation + diffuse * INV_PI) * color.rgb;
-        vFragColor = vec4(result, 1.0);
+        // ambient component * light in the scene
+        vFragColor.rgb = Ka.rgb * ambient * lights[i].color * lights[i].intensity * attenuation;
 
-        // vFragColor.rgb += INV_PI * color.rgb * lights[i].color * lights[i].intensity * attenuation;
+        // normal component
+        vFragColor.rgb *= max(dot(normal, light_vector), 0.0); // light_vector w kierunku swiatla (0.0, 0.0, 1.0) od vertex pos
 
-        // specular
-        vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
+
+        // diffuse component
+        vec3 inside = INV_PI * color.rgb;
+
+        // specular component
+        if (Ns == 500.0) {
+            inside += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
+        }
+
+        vFragColor.rgb += inside;
 
     }
     
