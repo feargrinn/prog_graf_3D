@@ -71,7 +71,7 @@ Proszę usunąć niepotrzebny wykomentowany kod.
 
 15.01.2024 16:29:31 OK
 
-# Diffuse
+# Diffuse 20/25
 
 22.01.2024 10:06:15
 Uniform buffer w BlinnPhing material jest za mały. 
@@ -83,3 +83,12 @@ Uniform buffer w BlinnPhing material jest za mały.
 31.01.2024 11:16:43
 normalna w ogóle nie jest używana do obliczenia swiatła!
 Warunek sprawdzający czy ścianka jest front czy backfacing jest niepoprawny. Jakby Pan przestawił switalo na druga strone to ta scianka powinna być oświetlona. To się osiąga zmieniając normalne, takl jak to opisałem. 
+
+12.02.2024 11:51:33 OK
+
+# Specular 0/10
+
+12.02.2024 11:52:09
+view vector ma zły znak. 
+
+
