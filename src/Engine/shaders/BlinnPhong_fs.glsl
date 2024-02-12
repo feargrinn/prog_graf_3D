@@ -79,10 +79,8 @@ void main() {
         vFragColor.rgb += lights[i].color * lights[i].intensity * attenuation * diffuse * INV_PI * color.rgb;
 
         // specular
-        if (Ns == 500) {
-            vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
-        }
-        
+        vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
+
     }
     
 }
