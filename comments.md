@@ -1,4 +1,4 @@
-# Total 111/147
+# Total 142/147
 
 # House 2/2
 
@@ -86,9 +86,11 @@ Warunek sprawdzający czy ścianka jest front czy backfacing jest niepoprawny. J
 
 12.02.2024 11:51:33 OK
 
-# Specular 0/10
+# Specular 10/10
 
 12.02.2024 11:52:09
 view vector ma zły znak. 
+
+12.02.2024 17:25:04 OK
 
 
