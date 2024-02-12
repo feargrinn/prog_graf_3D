@@ -44,8 +44,8 @@ void main() {
     vec4 color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
     vec3 normal = normalize(vertex_normal_vs);
     float INV_PI = 1.0/3.1415;
-    // fragment pos - camera pos (0,0,0)
-    vec3 view_vector = normalize(vertex_position_vs);
+    // camera pos (0,0,0) - fragment pos
+    vec3 view_vector = -normalize(vertex_position_vs);
 
     if (!gl_FrontFacing) {
         normal = -normal;
@@ -62,36 +62,27 @@ void main() {
     }
 
     vFragColor.a = color.a;
-    // vFragColor.rgb = srgb_gamma_correction(normal.rgb);
+    vFragColor.rgb = Ka.rgb * ambient;
 
     for (int i = 0; i < n_lights; i++) {
         float light_distance = distance(lights[i].position, vertex_position_vs);
         float r = max(lights[i].radius, light_distance);
         float attenuation = 1.0 / (r * r);
     
-
         vec3 light_vector = lights[i].position - vertex_position_vs;
         //vec3 light_vector = normalize(lights[i].position - vertex_position_vs);
         vec3 half_vector = normalize(light_vector + view_vector);
 
+        // diffuse
+        float diffuse = max(dot(normal, light_vector), 0.0);
 
-        // ambient component * light in the scene
-        vFragColor.rgb = Ka.rgb * ambient * lights[i].color * lights[i].intensity * attenuation;
+        vFragColor.rgb += lights[i].color * lights[i].intensity * attenuation * diffuse * INV_PI * color.rgb;
 
-        // normal component
-        vFragColor.rgb *= max(dot(normal, light_vector), 0.0); // light_vector w kierunku swiatla (0.0, 0.0, 1.0) od vertex pos
-
-
-        // diffuse component
-        vec3 inside = INV_PI * color.rgb;
-
-        // specular component
-        if (Ns == 500.0) {
-            inside += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
+        // specular
+        if (Ns == 500) {
+            vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
         }
-
-        vFragColor.rgb += inside;
-
+        
     }
     
 }
