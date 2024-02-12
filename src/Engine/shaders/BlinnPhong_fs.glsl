@@ -70,17 +70,17 @@ void main() {
         float attenuation = 1.0 / (r * r);
     
         vec3 light_vector = lights[i].position - vertex_position_vs;
-        //vec3 light_vector = normalize(lights[i].position - vertex_position_vs);
         vec3 half_vector = normalize(light_vector + view_vector);
 
         // diffuse
         float diffuse = max(dot(normal, light_vector), 0.0);
 
-        vFragColor.rgb += lights[i].color * lights[i].intensity * attenuation * diffuse * INV_PI * color.rgb;
+        vFragColor.rgb += lights[i].color * lights[i].intensity * attenuation * diffuse * color.rgb * INV_PI;
 
         // specular
-        vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
-
+        //vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns) * Ks.rgb;
+        vFragColor.rgb += (Ns + 8) / (8 * 3.1415) * max(pow((normal.x * half_vector.x + normal.y * half_vector.y + normal.z * half_vector.z), Ns), 0.0) * Ks.rgb;
+        
     }
     
 }
